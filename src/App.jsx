@@ -1,5 +1,6 @@
 
-import './App.css'
+
+import Body from './components/Body'
 
 function App() {
  
@@ -8,8 +9,9 @@ function App() {
     
     
     <div>
-      <div className="text-3xl font-bold text-green-800"> Hello Sanju </div>
+      <Body/>
        </div>
+
   )
 }
 
