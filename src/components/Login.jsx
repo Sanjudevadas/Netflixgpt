@@ -35,7 +35,18 @@ const Login = () => {
           placeholder="Email"
           className="w-full p-3 mb-4 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
         />
-        <input
+        {!isSignInForm &&  (
+               <input
+
+               type="text"
+               placeholder="Full Name"
+               className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
+               /> 
+        )
+        
+   }
+     
+          <input
           type="password"
           placeholder="Password"
           className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
@@ -43,9 +54,10 @@ const Login = () => {
         <button className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded transition duration-300">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
-        <p className="text-gray-400 text-center mt-4" onClick={toggleSignInFrom}>
-          New to Netflix?{" "}
-                      Sign up now
+        <p className="text-gray-400 text-center mt-4 cursor-pointer" onClick={toggleSignInFrom}>
+        {isSignInForm ? "New to Netflix?Sign up now" : "Already registered?Sign In Now"}
+         
+          
           
         </p>
       </form>
