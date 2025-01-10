@@ -5,7 +5,7 @@ import { checkValidData } from "../utils/validate";
 
 const Login = () => {
   const [isSignInForm , setIsSignInForm] = useState(true);
-  
+  const [errorMessage,setErrorMessage] = useState(null);
    const email = useRef(null);
    const password = useRef(null);
 
@@ -17,7 +17,10 @@ const Login = () => {
     console.log("Password:", passwordValue);
   
     // Validate form data
-    checkValidData(emailValue, passwordValue);
+   const message = checkValidData(emailValue, passwordValue);
+   setErrorMessage(message)
+   
+   console.log(message);
   };
   
 
@@ -75,6 +78,8 @@ const Login = () => {
           placeholder="Password"
           className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
         />
+        <p className="text-red-700 font-bold py-1 pb-3 text-xs" >{errorMessage}</p>
+
         <button className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded transition duration-300" onClick={handleButtonClick}>
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
