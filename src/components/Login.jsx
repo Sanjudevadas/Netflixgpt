@@ -2,6 +2,8 @@ import Header from "./Header";
 import netflixbg from "../assets/netflixbg.jpg";
 import { useState, useRef } from "react";
 import { checkValidData } from "../utils/validate";
+import {  createUserWithEmailAndPassword ,signInWithEmailAndPassword} from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isSignInForm , setIsSignInForm] = useState(true);
@@ -23,8 +25,34 @@ const Login = () => {
     //sign in /sign up logic
     if(!isSignInForm){
       //signup
+      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    console.log(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMessage(errorCode+"-"+ errorMessage);
+    // ..
+  });
+
     } else {
       //sign in
+      signInWithEmailAndPassword(auth, emailValue, passwordValue)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user)
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMessage(errorCode+ errorMessage)
+  });
     }
 
    }
