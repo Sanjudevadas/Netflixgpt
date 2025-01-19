@@ -19,6 +19,15 @@ const Login = () => {
     // Validate form data
    const message = checkValidData(emailValue, passwordValue);
    setErrorMessage(message)
+   if(message == null){
+    //sign in /sign up logic
+    if(!isSignInForm){
+      //signup
+    } else {
+      //sign in
+    }
+
+   }
    
    console.log(message);
   };
