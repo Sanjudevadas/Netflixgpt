@@ -5,6 +5,7 @@ import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -12,65 +13,58 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  
+  // Refs for input fields
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const Navigate = useNavigate();
+  
+  const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    const emailValue = email.current?.value; // Access the value of the email input
-    const passwordValue = password.current?.value; // Access the value of the password input
+  const handleButtonClick = async () => {
+    const nameValue = name.current?.value; // Get name value
+    const emailValue = email.current?.value; // Get email value
+    const passwordValue = password.current?.value; // Get password value
 
+    console.log("Name:", nameValue);
     console.log("Email:", emailValue);
     console.log("Password:", passwordValue);
 
     // Validate form data
     const message = checkValidData(emailValue, passwordValue);
     setErrorMessage(message);
+
     if (message == null) {
-      //sign in /sign up logic
       if (!isSignInForm) {
-        //signup
-        createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-          .then((userCredential) => {
-            // Signed up
-            const user = userCredential.user;
-            console.log(user);
-            Navigate("/browse")
-            // ...
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            setErrorMessage(errorCode + "-" + errorMessage);
-            // ..
+        // Sign-up logic
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
+          const user = userCredential.user;
+
+          // Update user profile with name
+          await updateProfile(user, {
+            displayName: nameValue,
           });
+
+          console.log("User Created:", user);
+          navigate("/browse");
+        } catch (error) {
+          setErrorMessage(error.code + " - " + error.message);
+        }
       } else {
-        //sign in
-        signInWithEmailAndPassword(auth, emailValue, passwordValue)
-          .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            console.log(user);
-            Navigate("/browse");
-            // ...
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            setErrorMessage(errorCode + errorMessage);
-          });
+        // Sign-in logic
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue);
+          console.log("User Signed In:", userCredential.user);
+          navigate("/browse");
+        } catch (error) {
+          setErrorMessage(error.code + " - " + error.message);
+        }
       }
     }
-
-    console.log(message);
   };
 
-  /* const handleButtonClick = ()=>{
-    //validate form data
-    checkValidData(email,password,)
-  }*/
-
-  const toggleSignInFrom = () => {
+  const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
 
@@ -78,11 +72,7 @@ const Login = () => {
     <div className="relative min-h-screen bg-black">
       <Header />
       <div className="absolute inset-0">
-        <img
-          src={netflixbg}
-          alt="background"
-          className="w-full h-full object-cover brightness-50"
-        />
+        <img src={netflixbg} alt="background" className="w-full h-full object-cover brightness-50" />
       </div>
 
       <form
@@ -92,19 +82,22 @@ const Login = () => {
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
+
+        {!isSignInForm && (
+          <input
+            ref={name}
+            type="text"
+            placeholder="Full Name"
+            className="w-full p-3 mb-4 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
+          />
+        )}
+
         <input
           ref={email}
-          type="text"
+          type="email"
           placeholder="Email"
           className="w-full p-3 mb-4 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
         />
-        {!isSignInForm && (
-          <input
-            type="text"
-            placeholder="Full Name"
-            className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
-          />
-        )}
 
         <input
           ref={password}
@@ -112,9 +105,8 @@ const Login = () => {
           placeholder="Password"
           className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
         />
-        <p className="text-red-700 font-bold py-1 pb-3 text-xs">
-          {errorMessage}
-        </p>
+
+        {errorMessage && <p className="text-red-700 font-bold py-1 pb-3 text-xs">{errorMessage}</p>}
 
         <button
           className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded transition duration-300"
@@ -122,13 +114,9 @@ const Login = () => {
         >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
-        <p
-          className="text-gray-400 text-center mt-4 cursor-pointer"
-          onClick={toggleSignInFrom}
-        >
-          {isSignInForm
-            ? "New to Netflix?Sign up now"
-            : "Already registered?Sign In Now"}
+
+        <p className="text-gray-400 text-center mt-4 cursor-pointer" onClick={toggleSignInForm}>
+          {isSignInForm ? "New to Netflix? Sign up now" : "Already registered? Sign In Now"}
         </p>
       </form>
     </div>
