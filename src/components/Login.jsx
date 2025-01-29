@@ -2,77 +2,77 @@ import Header from "./Header";
 import netflixbg from "../assets/netflixbg.jpg";
 import { useState, useRef } from "react";
 import { checkValidData } from "../utils/validate";
-import {  createUserWithEmailAndPassword ,signInWithEmailAndPassword} from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [isSignInForm , setIsSignInForm] = useState(true);
-  const [errorMessage,setErrorMessage] = useState(null);
-   const email = useRef(null);
-   const password = useRef(null);
+  const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const Navigate = useNavigate();
 
-   const handleButtonClick = () => {
+  const handleButtonClick = () => {
     const emailValue = email.current?.value; // Access the value of the email input
     const passwordValue = password.current?.value; // Access the value of the password input
-  
+
     console.log("Email:", emailValue);
     console.log("Password:", passwordValue);
-  
-    // Validate form data
-   const message = checkValidData(emailValue, passwordValue);
-   setErrorMessage(message)
-   if(message == null){
-    //sign in /sign up logic
-    if(!isSignInForm){
-      //signup
-      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    console.log(user);
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setErrorMessage(errorCode+"-"+ errorMessage);
-    // ..
-  });
 
-    } else {
-      //sign in
-      signInWithEmailAndPassword(auth, emailValue, passwordValue)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    console.log(user)
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setErrorMessage(errorCode+ errorMessage)
-  });
+    // Validate form data
+    const message = checkValidData(emailValue, passwordValue);
+    setErrorMessage(message);
+    if (message == null) {
+      //sign in /sign up logic
+      if (!isSignInForm) {
+        //signup
+        createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+          .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            console.log(user);
+            Navigate("/browser")
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + "-" + errorMessage);
+            // ..
+          });
+      } else {
+        //sign in
+        signInWithEmailAndPassword(auth, emailValue, passwordValue)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log(user);
+            Navigate("/browse");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + errorMessage);
+          });
+      }
     }
 
-   }
-   
-   console.log(message);
+    console.log(message);
   };
-  
 
- /* const handleButtonClick = ()=>{
+  /* const handleButtonClick = ()=>{
     //validate form data
     checkValidData(email,password,)
   }*/
-  
-  const toggleSignInFrom = ()=>{
-  
+
+  const toggleSignInFrom = () => {
     setIsSignInForm(!isSignInForm);
-
-  }
-
-
+  };
 
   return (
     <div className="relative min-h-screen bg-black">
@@ -86,45 +86,49 @@ const Login = () => {
       </div>
 
       <form
-        onSubmit={(e)=> e.preventDefault()}
+        onSubmit={(e) => e.preventDefault()}
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-md p-8 bg-black/75 rounded-lg shadow-lg"
       >
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
-        {isSignInForm ? "Sign In" : "Sign Up"}
+          {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
-        <input 
-         ref={email}
+        <input
+          ref={email}
           type="text"
           placeholder="Email"
           className="w-full p-3 mb-4 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
         />
-        {!isSignInForm &&  (
-               <input
+        {!isSignInForm && (
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
+          />
+        )}
 
-               type="text"
-               placeholder="Full Name"
-               className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
-               /> 
-        )
-        
-   }
-     
-          <input 
+        <input
           ref={password}
           type="password"
           placeholder="Password"
           className="w-full p-3 mb-6 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
         />
-        <p className="text-red-700 font-bold py-1 pb-3 text-xs" >{errorMessage}</p>
+        <p className="text-red-700 font-bold py-1 pb-3 text-xs">
+          {errorMessage}
+        </p>
 
-        <button className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded transition duration-300" onClick={handleButtonClick}>
+        <button
+          className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded transition duration-300"
+          onClick={handleButtonClick}
+        >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
-        <p className="text-gray-400 text-center mt-4 cursor-pointer" onClick={toggleSignInFrom}>
-        {isSignInForm ? "New to Netflix?Sign up now" : "Already registered?Sign In Now"}
-         
-          
-          
+        <p
+          className="text-gray-400 text-center mt-4 cursor-pointer"
+          onClick={toggleSignInFrom}
+        >
+          {isSignInForm
+            ? "New to Netflix?Sign up now"
+            : "Already registered?Sign In Now"}
         </p>
       </form>
     </div>

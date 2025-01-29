@@ -15,6 +15,7 @@ import { addUser, removeUser } from '../utils/userSlice'
 const Body = () => {
   const dispatch = useDispatch();
 
+
     const appRoute = createBrowserRouter([
         {
             path:"/",
@@ -28,7 +29,7 @@ const Body = () => {
         
         },
         
-        ]);
+        ]); 
 
         useEffect(()=> {
 
@@ -39,10 +40,12 @@ const Body = () => {
               const {uid,email,displayName} = user;
               dispatch(addUser({uid:uid ,email:email,displayName:displayName}))
               // ...
+              
             } else {
               // User is signed out
               // ...
              dispatch(removeUser())
+             
 
             }
           });

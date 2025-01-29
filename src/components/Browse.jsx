@@ -2,7 +2,9 @@
 
 const Browse = () => {
   return (
-    <div>Browse</div>
+    <div>Browse
+      hlo
+    </div>
   )
 }
 
