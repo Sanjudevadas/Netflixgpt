@@ -1,11 +1,16 @@
-import { signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import Logo from '../assets/Logonetflix.png';
 import usericon from '../assets/netflix_usericon.jpg';
 import { auth } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { addUser, removeUser } from '../utils/userSlice';
 
 const Header = () => {
+
+const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const user =useSelector((store)=> store.user)
 
@@ -20,6 +25,28 @@ navigate("/error")
 
   
 }
+
+ useEffect(()=> {
+
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              // User is signed in, see docs for a list of available properties
+              // https://firebase.google.com/docs/reference/js/auth.user
+              const {uid,email,displayName} = user;
+              dispatch(addUser({uid:uid ,email:email,displayName:displayName}))
+              // ...
+              
+            } else {
+              // User is signed out
+              // ...
+             dispatch(removeUser())
+             
+
+            }
+          });
+
+
+        },[])
 
   return (
     <header className="absolute top-0 w-full px-8 py-3 bg-gradient-to-b from-black z-20 flex items-center justify-between">
