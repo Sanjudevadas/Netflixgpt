@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const MovieBackground = () => {
+const MovieBackground = ({ movieId }) => {
   return (
-    <div>MovieBackground</div>
-  )
-}
+    <div className="absolute top-0 left-0 w-full h-[80vh] -z-10">
+     
+    </div>
+  );
+};
 
-export default MovieBackground
+export default MovieBackground;
