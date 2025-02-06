@@ -1,8 +1,12 @@
 import React from 'react'
 
-const VideoTitle = () => {
+
+
+    const VideoTitle =(title,overview) =>{
   return (
-    <div>VideoTitle</div>
+    <div>
+        
+        </div>
   )
 }
 
