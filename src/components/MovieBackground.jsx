@@ -1,55 +1,24 @@
-import { useEffect, useState } from "react";
-import { API_OPTIONS } from "../utils/constants";
+//import { useEffect } from "react";
+//import { API_OPTIONS } from "../utils/constants";
+import {  useSelector } from "react-redux";
+//import { addTrailerVideo } from "../utils/movieSlice";
 
 const MovieBackground = ({ movieId }) => {
-  const [trailerId, setTrailerId] = useState(null);
+  
+  const trailerVideos = useSelector((store) => store.movies.trailerVideos); // ✅ Get from Redux
 
-  const getMovieVideos = async () => {
-    if (!movieId) return; // Prevent fetching if movieId is undefined
-
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos`,
-        API_OPTIONS
-      );
-
-      if (!response.ok) throw new Error("Failed to fetch movie videos");
-
-      const json = await response.json();
-      console.log("sanju", json);
-
-      const filterdata = json.results.filter(
-        (video) => video.type === "Trailer"
-      );
-
-      if (filterdata.length > 0) {
-        setTrailerId(filterdata[0].key);
-      } else if (json.results.length > 0) {
-        setTrailerId(json.results[0].key);
-      } else {
-        console.warn("No trailer found for this movie");
-      }
-
-    } catch (error) {
-      console.error("Error fetching movie videos:", error);
-    }
-  };
-
-  useEffect(() => {
-    getMovieVideos();
-  }, [movieId]); // ✅ Fetch again if movieId changes
 
   return (
-    <div className="absolute top-0 left-0 w-full h-[80vh] -z-10">
-      {trailerId ? (
+    <div className="absolute top-0 left-0 w-full h-[80vh] -z-10 overflow-hidden">
+      {trailerVideos?.key && ( // ✅ Use Redux store value
         <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/${trailerId}?autoplay=1&mute=1`}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          src={`https://www.youtube.com/embed/${trailerVideos.key}?autoplay=1&mute=1&loop=1&playlist=${trailerVideos.key}`}
+          title="Movie Trailer"
+          frameBorder="0"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          allowFullScreen
         ></iframe>
-      ) : (
-        <p className="text-white text-center mt-10">No trailer available</p>
       )}
     </div>
   );
