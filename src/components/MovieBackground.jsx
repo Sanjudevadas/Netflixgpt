@@ -6,7 +6,7 @@ const MovieBackground = ({ movieId }) => {
 
   const trailerVideo = useSelector((store) => store.movies?.trailerVideo);
 
-  console.log("Redux Trailer Video:", trailerVideo);
+ 
 
   return (
     <div className="absolute top-0 left-0 w-full h-[80vh] -z-10 overflow-hidden">
