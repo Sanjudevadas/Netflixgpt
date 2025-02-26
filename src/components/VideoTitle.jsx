@@ -1,11 +1,11 @@
-import React from 'react';
+//import React from 'react';
 import PropTypes from 'prop-types';
 
 const VideoTitle = ({ title, overview, trailerUrl }) => {
   return (
     <div className="relative w-full h-[80vh] flex items-center justify-start px-10 sm:px-16 md:px-24 lg:px-36 text-white">
       {/* Video Background */}
-      {trailerUrl && (
+    *  {trailerUrl && (
         <video
           className="absolute inset-0 w-full h-full object-cover"
           src={trailerUrl}
