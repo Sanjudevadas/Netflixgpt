@@ -14,14 +14,19 @@ const MovieList = ({ title, movies }) => {
   }
 
   return (
-    <div>
-      <h1>{title}</h1>
-      <div>
+<div className="p-4 text-black">
+<h1 className="text-2xl md:text-3xl font-bold mb-4">{title}</h1>
+<div className="flex overflow-x-scroll ">
+     
+      <div className="flex">
         {movies.map((movie, index) => (
           <MovieCard key={index} posterPath={movie.poster_path} />
         ))}
       </div>
     </div>
+</div>
+     
+  
   );
 };
 
