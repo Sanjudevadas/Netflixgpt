@@ -12,7 +12,7 @@ const MovieBackground = ({ movieId }) => {
  
          
 <div className="absolute top-0 left-0 w-screen h-[80vh] -z-10 overflow-hidden">
- 
+
 {trailerVideo?.key ? (
    <div className="w-full h-full ">
 
