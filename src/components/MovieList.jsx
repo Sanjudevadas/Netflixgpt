@@ -14,17 +14,18 @@ const MovieList = ({ title, movies }) => {
   }
 
   return (
-<div className="p-4 text-black">
-<h1 className="text-2xl md:text-3xl font-bold mb-4">{title}</h1>
-<div className="flex overflow-x-scroll ">
-     
-      <div className="flex">
-        {movies.map((movie, index) => (
-          <MovieCard key={index} posterPath={movie.poster_path} />
-        ))}
-      </div>
+<div className="p-2 text-white bg-black">
+  <h1 className="text-2xl md:text-3xl font-bold mb-4">{title}</h1>
+  <div className="flex overflow-x-auto scrollbar-hide whitespace-nowrap w-full"> {/* Use overflow-x-auto */}
+    <div className="flex space-x-4"> {/* Ensure spacing without extra margin */}
+      {movies.map((movie, index) => (
+        <MovieCard key={index} posterPath={movie.poster_path} />
+      ))}
     </div>
+  </div>
 </div>
+
+
      
   
   );

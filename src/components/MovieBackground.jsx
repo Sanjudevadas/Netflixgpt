@@ -11,15 +11,15 @@ const MovieBackground = ({ movieId }) => {
   return (
  
          
-<div className="absolute top-0 left-0 w-screen h-[80vh] -z-10 overflow-hidden">
+<div className="absolute top-0 left-0 w-full h-screen -z-10 overflow-hidden">
 
 {trailerVideo?.key ? (
-   <div className="w-full h-full ">
+   <div className="relative w-full h-screen ">
 
     
         <iframe
 
-        className="w-full object-cover aspect-video"
+        className="absolute w-full h-full "
          // className="absolute top-0 left-0 w-full h-full object-cover"
           src={`https://www.youtube.com/embed/${trailerVideo.key}?autoplay=1&mute=1&loop=1&playlist=${trailerVideo.key}`}
           title="Movie Trailer"
