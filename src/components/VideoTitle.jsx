@@ -1,23 +1,10 @@
-//import React from 'react';
 import PropTypes from 'prop-types';
 
 const VideoTitle = ({ title, overview, trailerUrl }) => {
   return (
-    <div className="relative w-full h-[80vh] flex items-center justify-start px-10 sm:px-16 md:px-24 lg:px-36 text-white">
-      {/* Video Background */}
-    *  {trailerUrl && (
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          src={trailerUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-        ></video>
-      )}
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent"></div>
+    <div className="relative w-full h-screen flex items-center justify-start px-10 sm:px-16 md:px-24 lg:px-36 text-white">
+      {/* Gradient Overlay - Covers the entire screen */}
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black via-black/50 to-transparent"></div>
 
       {/* Content */}
       <div className="relative z-10 max-w-2xl">
