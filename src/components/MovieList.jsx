@@ -8,26 +8,24 @@ const MovieList = ({ title, movies }) => {
     return (
       <div>
         <h1>{title}</h1>
-        <p>No movies available</p> {/* ✅ Handle empty state */}
+        <p>No movies available</p>
       </div>
     );
   }
 
   return (
-<div className="p-2 text-white  ">
-  <h1 className="text-2xl md:text-3xl font-bold mb-4">{title}</h1>
-  <div className="flex overflow-x-auto scrollbar-hide whitespace-nowrap w-full"> {/* Use overflow-x-auto */}
-    <div className="flex space-x-4"> {/* Ensure spacing without extra margin */}
-      {movies.map((movie, index) => (
-        <MovieCard key={index} posterPath={movie.poster_path} />
-      ))}
+    <div className="p-2 text-white">
+      <h1 className="text-2xl md:text-3xl font-bold mb-4">{title}</h1>
+      
+      {/* Scrollable wrapper */}
+      <div className="overflow-x-auto overflow-y-hidden scrollbar-hide">
+        <div className="flex space-x-4 min-w-max">  {/* Ensure scrolling works */}
+          {movies.map((movie, index) => (
+            <MovieCard key={index} posterPath={movie.poster_path} />
+          ))}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-
-     
-  
   );
 };
 
